@@ -3,7 +3,7 @@
  * Plugin Name: HM Media PII Cleaner
  * Plugin URI: https://github.com/humanmade/hm-media-pii-cleaner
  * Description: Strips hidden metadata (EXIF/IPTC/XMP, PDF Info/XMP) from publicly downloadable media at upload time, with verification and admin flagging for files that can't be safely sanitized.
- * Version: __VERSION__
+ * Version: 0.2.0
  * Author: Human Made Limited
  * Author URI: https://humanmade.com
  * Text Domain: hm-media-pii-cleaner
