@@ -1,0 +1,20 @@
+name: Playground Preview - Build
+
+# Builds the plugin zip and blueprint from pull request code with read-only
+# permissions. playground-preview-publish.yml publishes the result.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    uses: WordPress/action-wp-playground-pr-preview/.github/workflows/preview-build.yml@43fc435558bc6cee69f5b214d6b8ca4f9f80c31d # v3
+    with:
+      php-version: '8.3'
+      build-command: bash bin/build-playground.sh
+      artifacts: hm-media-pii-cleaner=build/hm-media-pii-cleaner.zip
+      blueprint-from-build: build/blueprint.json

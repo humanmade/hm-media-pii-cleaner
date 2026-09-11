@@ -1,0 +1,19 @@
+name: Playground Preview - Publish
+
+# Runs from the default branch after the build finishes, uploads the zip to the
+# ci-artifacts prerelease and adds an "Open in Playground" button to the PR.
+
+on:
+  workflow_run:
+    workflows: ["Playground Preview - Build"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  publish:
+    uses: WordPress/action-wp-playground-pr-preview/.github/workflows/preview-publish.yml@43fc435558bc6cee69f5b214d6b8ca4f9f80c31d # v3
+    with:
+      blueprint-from-artifact: true

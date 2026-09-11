@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<ruleset name="hm-media-pii-cleaner">
+	<description>PHP coding standards for HM Media PII Cleaner</description>
+
+	<!-- Set the PHP version PHP_CodeSniffer runs sniffs against. -->
+	<config name="php_version" value="80300"/>
+
+	<!-- Minimum PHP version for PHPCompatibility. -->
+	<config name="testVersion" value="8.3-"/>
+
+	<!-- Show sniff codes in all reports. -->
+	<arg value="s"/>
+
+	<!-- Check PHP files only. -->
+	<arg name="extensions" value="php"/>
+
+	<file>.</file>
+
+	<exclude-pattern>vendor/</exclude-pattern>
+	<!-- Dev tooling: tests and CLI build scripts are not part of the shipped plugin. -->
+	<exclude-pattern>tests/</exclude-pattern>
+	<exclude-pattern>bin/</exclude-pattern>
+	<exclude-pattern>build/</exclude-pattern>
+
+	<!-- Check for PHP cross-version compatibility. -->
+	<rule ref="PHPCompatibilityWP"/>
+
+	<!-- Use the Human Made coding standards. -->
+	<rule ref="HM">
+		<!-- Don't restrict namespaced functions to `namespace.php`. -->
+		<exclude name="HM.Files.FunctionFileName.WrongFile"/>
+
+		<!-- wpcs 3.x pulls in PSR12's no-space-before-colon rule, which contradicts HM house style (`function foo() : void`). -->
+		<exclude name="PSR12.Functions.ReturnTypeDeclaration.SpaceBeforeColon"/>
+
+		<!-- Ignore directory naming rules that turn namespace Foo_Bar into directory foo_bar. -->
+		<exclude name="HM.Files.NamespaceDirectoryName"/>
+
+		<!-- Allow short `@var` notation. -->
+		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
+
+		<!-- Faulty sniff, removed upstream in PSR2R but still included by HM. -->
+		<exclude name="PSR2R.Namespaces.UseInAlphabeticalOrder.Order"/>
+
+		<!-- Don't require inline comments to end in punctuation. -->
+		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
+
+		<!-- Deprecated sniffs. -->
+		<exclude name="Generic.Functions.CallTimePassByReference"/>
+		<exclude name="HM.Debug.ESLint"/>
+
+		<!-- Allow some doc comment lines not to begin with a capital, for sub docs. -->
+		<exclude name="Generic.Commenting.DocComment.LongNotCapital"/>
+	</rule>
+
+	<!-- Allow / (forward slash) in hook names. -->
+	<rule ref="WordPress.NamingConventions.ValidHookName">
+		<properties>
+			<property name="additionalWordDelimiters" value="/"/>
+		</properties>
+	</rule>
+</ruleset>

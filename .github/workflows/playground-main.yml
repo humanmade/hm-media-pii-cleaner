@@ -1,0 +1,43 @@
+name: Playground - main
+
+# Publishes the plugin zip built from main to the playground-main prerelease,
+# at the stable URL the README "Try it in Playground" link installs from.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: playground-main
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@b2f833f7d1c070621af195c088d275c4cd60ef8f # 2.9.0
+        with:
+          php-version: '8.3'
+          tools: composer
+
+      - name: Build plugin zip
+        run: bash bin/build-playground.sh
+
+      - name: Upload to the playground-main prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh release view playground-main --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            gh release create playground-main --repo "$GITHUB_REPOSITORY" --prerelease --target "$GITHUB_SHA" \
+              --title "Playground (main)" \
+              --notes "Plugin zip rebuilt from main on every push, used by the WordPress Playground link in the README. Not a release."
+          fi
+          gh release upload playground-main build/hm-media-pii-cleaner.zip --repo "$GITHUB_REPOSITORY" --clobber
