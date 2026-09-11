@@ -104,6 +104,17 @@ composer test
 composer lint
 ```
 
+`bin/build-zip.sh` builds the installable zip into `build/`, with production `vendor/` included.
+
+### Releasing
+
+The plugin header keeps `Version: __VERSION__` in the repo. To release:
+
+1. Go to Releases > Draft a new release and create a new tag such as `v1.2.0` on `main`.
+2. Write the notes (or use "Generate release notes") and publish.
+
+`release.yml` then writes `1.2.0` into the plugin header, commits it onto the tag, and attaches `hm-media-pii-cleaner-v1.2.0.zip` to the release. That zip is the one to install. GitHub's source archives don't include `vendor/`, and without it every PDF is flagged and quarantined instead of cleaned.
+
 ### WordPress Playground
 
 ```
